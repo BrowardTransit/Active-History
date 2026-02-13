@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Bus Ride Tracker</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    margin: 0;
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 200px;
+    background: #0077cc;
+    color: white;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.sidebar h3 {
+    margin-top: 0;
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    margin: 10px 0;
+}
+
+.sidebar a:hover {
+    text-decoration: underline;
+}
+
+/* Main content */
+.container {
+    flex: 1;
+    padding: 15px;
+}
+
+/* Logo section */
+.logo {
+    text-align: center;
+    background: #0077cc;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+input, button {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+button {
+    background: #0077cc;
+    color: white;
+    border: none;
+}
+
+.card {
+    background: white;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+h3 {
+    margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <h3>Menu</h3>
+    <a href="#" onclick="openSettings()">Settings</a>
+    <a href="#" onclick="contactUs()">Contact Us</a>
+</div>
+
+<!-- Main content -->
+<div class="container">
+
+<!-- Logo / Photo log with flower image -->
+<div class="logo">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Flower_icon.svg/120px-Flower_icon.svg.png" 
+         alt="Flower" style="height:40px; vertical-align:middle; margin-right:10px;">
+    BC Transit
+</div>
+
+<!-- Name input -->
+<input type="text" id="name" placeholder="Enter your name">
+
+<h3>Add Ride</h3>
+<input type="date" id="date">
+<input type="time" id="time">
+<input type="text" id="route" placeholder="Route Name">
+<input type="number" id="fare" placeholder="Fare ($)">
+<input type="number" id="balance" placeholder="Remaining Balance ($)">
+<button onclick="addRide()">Add Ride</button>
+
+<h3>BC Transit Ride History</h3>
+<div id="history"></div>
+
+</div>
+
+<script>
+// Initialize rides as empty (clears previous routes)
+let rides = [];
+
+// Clear localStorage as well to remove previous data
+localStorage.removeItem("rides");
+
+function addRide() {
+    const name = document.getElementById("name").value;
+    const date = document.getElementById("date").value;
+    const time = document.getElementById("time").value;
+    const route = document.getElementById("route").value;
+    const fare = document.getElementById("fare").value;
+    const balance = document.getElementById("balance").value;
+
+    if (!name || !date || !time || !route || !fare || !balance) {
+        alert("Please fill out all fields");
+        return;
+    }
+
+    const ride = { name, date, time, route, fare, balance };
+    rides.unshift(ride);
+    localStorage.setItem("rides", JSON.stringify(rides));
+
+    displayRides();
+}
+
+function displayRides() {
+    const historyDiv = document.getElementById("history");
+    historyDiv.innerHTML = "";
+
+    rides.forEach(ride => {
+        historyDiv.innerHTML += `
+            <div class="card">
+                <strong>${ride.name}</strong><br>
+                <strong>${ride.route}</strong><br>
+                Date: ${ride.date}<br>
+                Time: ${ride.time}<br>
+                Fare: $${ride.fare}<br>
+                Balance: $${ride.balance}
+            </div>
+        `;
+    });
+}
+
+// Sidebar actions
+function openSettings() {
+    alert("Settings panel is coming soon!");
+}
+
+function contactUs() {
+    alert("Contact us at support@bctransit.com");
+}
+
+displayRides();
+</script>
+
+</body>
+</html>
